@@ -16,6 +16,8 @@ public class PhotoModel implements Parcelable {
     private String description;
     @SerializedName("image_url")
     private ArrayList<String> imageUrls;
+    @SerializedName("user")
+    private UserModel user;
 
 
     public PhotoModel(int id, String name, String description, ArrayList<String> imageUrls) {
@@ -33,6 +35,7 @@ public class PhotoModel implements Parcelable {
                 ",\n description='" + description + '\'' +
                 ",\n thumbnail URL='" + getThumbnailImageURL() + '\'' +
                 ",\n expanded URL='" + getExpandedImageURL() + '\'' +
+                ",\n user='" + user.toString() + '\'' +
                 "\n}";
     }
 
@@ -47,6 +50,10 @@ public class PhotoModel implements Parcelable {
 
     public String getDescription() {
         return description;
+    }
+
+    public UserModel getUser() {
+        return user;
     }
 
     public ArrayList<String> getImageUrls() {
