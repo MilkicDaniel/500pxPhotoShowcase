@@ -1,6 +1,7 @@
 package com.example.a500pxphotoshowcase.AsyncTasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import com.example.a500pxphotoshowcase.API;
 import com.example.a500pxphotoshowcase.Models.PageModel;
 import java.io.IOException;
@@ -18,12 +19,14 @@ public class LoadPageAsyncTask extends AsyncTask<Void, Void, PageModel> {
     private String key;
     private String filter;
     private int page;
+    private int numberOfResults;
     private TaskListener taskListener;
 
-    public LoadPageAsyncTask(String key, String filter, int page, TaskListener taskListener){
+    public LoadPageAsyncTask(String key, String filter,int numberOfResults, int page, TaskListener taskListener){
         this.key = key;
         this.filter = filter;
         this.page = page;
+        this.numberOfResults = numberOfResults;
         this.taskListener = taskListener;
     }
 
@@ -40,9 +43,9 @@ public class LoadPageAsyncTask extends AsyncTask<Void, Void, PageModel> {
         PageModel pageModel = new PageModel();
 
         try{
-            pageModel = api.getPage(key, filter, "2,1080", page).execute().body();
+            pageModel = api.getPage(key, filter, "3,1080", numberOfResults, page).execute().body();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.d("ERROR","LoadPageAsyncTask error" +  e);
         }
 
 

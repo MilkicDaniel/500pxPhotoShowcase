@@ -13,7 +13,7 @@ public interface API {
 
     @GET("photos?")
     Call<PageModel> getPage(@Query("consumer_key") String consumerKey, @Query("feature") String feature,
-                            @Query("image_size") String image_size, @Query("page") int page);
+                            @Query("image_size") String image_size, @Query("rpp") int rpp, @Query("page") int page);
 
 
 
