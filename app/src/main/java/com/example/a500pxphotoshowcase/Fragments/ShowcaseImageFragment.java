@@ -43,12 +43,6 @@ public class ShowcaseImageFragment extends Fragment {
             }
         });
 
-
-
-
-
-
-
         return root;
     }
 

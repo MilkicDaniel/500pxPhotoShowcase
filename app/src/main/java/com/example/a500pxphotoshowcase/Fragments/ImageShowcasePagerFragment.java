@@ -8,19 +8,19 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.a500pxphotoshowcase.Adapters.ImageShowcasePagerAdapter;
 import com.example.a500pxphotoshowcase.MainActivity;
 import com.example.a500pxphotoshowcase.Models.PhotoModel;
 import com.example.a500pxphotoshowcase.R;
 import com.example.a500pxphotoshowcase.ViewModel.GalleryViewModel;
-
 import java.util.ArrayList;
 
 
@@ -31,6 +31,7 @@ public class ImageShowcasePagerFragment extends Fragment {
     private ImageShowcasePagerAdapter imageShowcasePagerAdapter;
     private AppBarLayout appBar;
     private boolean isShowingInfo = false;
+    private FrameLayout overlayConatiner;
 
     public static final String TAG = "ImageShowcasePagerFragment";
 
@@ -48,12 +49,12 @@ public class ImageShowcasePagerFragment extends Fragment {
         appBar.setExpanded(true, false);
         final ImageView infoButton = getActivity().findViewById(R.id.toolbar_info_button);
         final TextView title = getActivity().findViewById(R.id.toolbar_title);
-
-
-        infoButton.setVisibility(View.VISIBLE);
+        overlayConatiner =  ((MainActivity) getContext()).findViewById(R.id.overlay_container);
 
 
         galleryViewModel = ViewModelProviders.of((MainActivity)getContext()).get(GalleryViewModel.class);
+        final Animation slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down);
+        final Animation slideUp = AnimationUtils.loadAnimation(getContext(), R.anim.slide_up);
 
 
         final View root =  inflater.inflate(R.layout.fragment_image_showcase_pager, container, false);
@@ -69,19 +70,28 @@ public class ImageShowcasePagerFragment extends Fragment {
         galleryViewModel.openImageInfoPage(getContext(),
                 galleryViewModel.getPhotoList().getValue().get(galleryViewModel.getShowcaseImagePosition().getValue()));
 
-        ((MainActivity) getContext()).findViewById(R.id.overlay_container).setVisibility(View.GONE);
 
+        overlayConatiner.setVisibility(View.GONE);
+        infoButton.setVisibility(View.VISIBLE);
 
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!isShowingInfo) {
-                    ((MainActivity) getContext()).findViewById(R.id.overlay_container).setVisibility(View.VISIBLE);
                     infoButton.setImageResource(R.drawable.close_icon);
+
+                    if(overlayConatiner != null) {
+                        overlayConatiner.setVisibility(View.VISIBLE);
+                        overlayConatiner.startAnimation(slideDown);
+                    }
                 }
                 else {
-                    ((MainActivity) getContext()).findViewById(R.id.overlay_container).setVisibility(View.GONE);
                     infoButton.setImageResource(R.drawable.info_icon);
+
+                    if(overlayConatiner != null) {
+                        overlayConatiner.setVisibility(View.GONE);
+                        overlayConatiner.startAnimation(slideUp);
+                    }
                 }
 
                 isShowingInfo = !isShowingInfo;
@@ -131,9 +141,8 @@ public class ImageShowcasePagerFragment extends Fragment {
             appBar.setExpanded(true, false);
 
         getActivity().findViewById(R.id.toolbar_info_button).setVisibility(View.GONE);
-        ((MainActivity) getContext()).findViewById(R.id.overlay_container).setVisibility(View.GONE);
-
         ((TextView) getActivity().findViewById(R.id.toolbar_title)).setText(getContext().getResources().getString(R.string.title));
+        overlayConatiner.setVisibility(View.GONE);
 
     }
 }

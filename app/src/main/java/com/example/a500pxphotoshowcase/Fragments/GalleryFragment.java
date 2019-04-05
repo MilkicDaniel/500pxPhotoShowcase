@@ -1,12 +1,16 @@
 package com.example.a500pxphotoshowcase.Fragments;
 
 
+import android.Manifest;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -44,9 +48,20 @@ public class GalleryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        int storagePermissionGranted = ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (storagePermissionGranted != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(((MainActivity) getContext()),
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
+        }
+
+
+        this.requestPermissions(new String[]{Manifest.permission.INTERNET}, 3);
         galleryViewModel = ViewModelProviders.of((MainActivity)getContext()).get(GalleryViewModel.class);
 
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(getContext().getString(R.string.saved_settings), MODE_PRIVATE);
+
         galleryViewModel.setKey(sharedPreferences.getString(getContext().getString(R.string.saved_key), ""));
 
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);

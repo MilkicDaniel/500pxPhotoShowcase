@@ -41,12 +41,14 @@
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:layout_marginEnd="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="5dp"
                     android:src="@drawable/info_icon"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginRight="8dp" />
 
             </android.support.constraint.ConstraintLayout>
 
