@@ -1,9 +1,12 @@
 package com.example.a500pxphotoshowcase.Models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
-public class PhotoModel {
+public class PhotoModel implements Parcelable {
 
     @SerializedName("id")
     private int id;
@@ -58,4 +61,36 @@ public class PhotoModel {
         return imageUrls.get(1);
     }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.name);
+        dest.writeString(this.description);
+        dest.writeStringList(this.imageUrls);
+    }
+
+    protected PhotoModel(Parcel in) {
+        this.id = in.readInt();
+        this.name = in.readString();
+        this.description = in.readString();
+        this.imageUrls = in.createStringArrayList();
+    }
+
+    public static final Parcelable.Creator<PhotoModel> CREATOR = new Parcelable.Creator<PhotoModel>() {
+        @Override
+        public PhotoModel createFromParcel(Parcel source) {
+            return new PhotoModel(source);
+        }
+
+        @Override
+        public PhotoModel[] newArray(int size) {
+            return new PhotoModel[size];
+        }
+    };
 }

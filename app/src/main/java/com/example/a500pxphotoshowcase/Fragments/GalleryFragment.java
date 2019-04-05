@@ -50,7 +50,7 @@ public class GalleryFragment extends Fragment {
         galleryViewModel.setKey(sharedPreferences.getString(getContext().getString(R.string.saved_key), ""));
 
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
-        RecyclerView recyclerView = root.findViewById(R.id.gallery_recycler_view);
+        final RecyclerView recyclerView = root.findViewById(R.id.gallery_recycler_view);
 
 
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), getNumberOfColumns()));
@@ -67,6 +67,13 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onChanged(@Nullable ArrayList<PhotoModel> photoModels) {
                 galleryRecyclerAdapter.notifyDataSetChanged();
+            }
+        });
+
+        galleryViewModel.getShowcaseImagePosition().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer position) {
+                recyclerView.scrollToPosition(position);
             }
         });
 

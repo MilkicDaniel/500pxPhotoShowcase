@@ -19,9 +19,11 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter<GalleryRecycler
 
     private ArrayList<PhotoModel> photoList;
     private GalleryViewModel model;
+    private Context context;
 
 
     public GalleryRecyclerAdapter(Context context, ArrayList<PhotoModel> photoList) {
+        this.context = context;
         this.photoList = photoList;
         this.model = ViewModelProviders.of((MainActivity)context).get(GalleryViewModel.class);;
     }
@@ -37,13 +39,22 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter<GalleryRecycler
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
 
         final PhotoModel photo = photoList.get(position);
 
         Picasso.get().load(photo.getThumbnailImageURL()).fit().centerCrop().into(viewHolder.image);
 
         model.loadPhotos(position);
+
+        viewHolder.image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                model.openExpandedImageGallery(context, viewHolder.getAdapterPosition());
+            }
+        });
+
+
 
     }
 

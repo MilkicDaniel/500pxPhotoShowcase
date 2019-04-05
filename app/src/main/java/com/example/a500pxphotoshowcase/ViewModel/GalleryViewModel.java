@@ -2,14 +2,21 @@ package com.example.a500pxphotoshowcase.ViewModel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.content.Context;
+
 import com.example.a500pxphotoshowcase.AsyncTasks.LoadPageAsyncTask;
+import com.example.a500pxphotoshowcase.Fragments.ImageShowcasePagerFragment;
+import com.example.a500pxphotoshowcase.MainActivity;
 import com.example.a500pxphotoshowcase.Models.PageModel;
 import com.example.a500pxphotoshowcase.Models.PhotoModel;
+import com.example.a500pxphotoshowcase.R;
+
 import java.util.ArrayList;
 
 public class GalleryViewModel extends ViewModel {
 
     private MutableLiveData<ArrayList<PhotoModel>> photoList = new MutableLiveData<>();
+    private MutableLiveData<Integer> showcaseImagePosition = new MutableLiveData<>();
 
 
     private String key;
@@ -56,11 +63,32 @@ public class GalleryViewModel extends ViewModel {
     }
 
 
+    public void openExpandedImageGallery(Context context, int position){
+
+        ((MainActivity) context).getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_container, new ImageShowcasePagerFragment(), ImageShowcasePagerFragment.TAG)
+                .addToBackStack(null)
+                .commit();
+
+        showcaseImagePosition.setValue(position);
+
+    }
+
+
     public void setKey(String key) {
         this.key = key;
     }
 
     public MutableLiveData<ArrayList<PhotoModel>> getPhotoList() {
         return photoList;
+    }
+
+
+    public MutableLiveData<Integer> getShowcaseImagePosition() {
+        return showcaseImagePosition;
+    }
+
+    public void setShowcaseImagePosition(int position) {
+        showcaseImagePosition.setValue(position);
     }
 }
